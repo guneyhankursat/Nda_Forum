@@ -17,11 +17,14 @@
 
       <button type="submit" :disabled="loading" class="submit-btn">
         <span v-if="loading">
-          <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+          <svg class="spinner" viewBox="0 0 50 50">
+            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+          </svg>
           Checking...
         </span>
         <span v-else>Check NDA</span>
       </button>
+
       <div v-if="error" class="error-msg">
         {{ error }}
       </div>
@@ -59,139 +62,164 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-.card {
-  background: rgba(247, 250, 252, 0.97);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.22);
-  padding: 2.5rem 2rem 2rem 2rem;
-  width: 100%;
-  max-width: 480px;
-  min-width: 0;
-  margin: 0 auto;
-  animation: fadeIn 0.8s cubic-bezier(.8,-0.6,0.2,1.5);
-  backdrop-filter: blur(4px);
+:root {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.92);
+  background-color: #1e1e1e;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #1e1e1e;
+  padding: 1rem;
 }
 
-@media (max-width: 600px) {
-  .card {
-    padding: 1.2rem 0.5rem;
-    max-width: 99vw;
-  }
+#app {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  box-sizing: border-box;
+  text-align: center;
 }
 
-@keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(30px);}
-  100% { opacity: 1; transform: translateY(0);}
+.card {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  margin: 1rem auto;
+  background-color: #f7f7f8;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  color: #1a1a1a;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .icon-title-row {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  margin-bottom: 0.8rem;
   justify-content: center;
+  gap: 0.5rem;
   width: 100%;
+  margin-bottom: 1rem;
 }
 
 .emoji {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  color: #1a1a1a;
 }
 
-.title {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #293145;
+h1.title {
+  font-size: 2rem;
+  color: #1a1a1a;
   margin: 0;
-  letter-spacing: 0.01em;
 }
 
 .nda-label {
-  display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #394150;
-  font-size: 1rem;
-  text-align: left;
-  width: 100%;
 }
 
-.nda-textarea {
+textarea {
   width: 100%;
-  font-family: inherit;
-  font-size: 1rem;
-  border-radius: 10px;
-  border: 1.5px solid #d1d5db;
-  background: #f8fafc;
-  padding: 1rem;
-  margin-bottom: 1.2rem;
+  max-width: 500px;
+  height: 150px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1em;
   resize: vertical;
   box-sizing: border-box;
-  transition: border-color 0.2s;
-  color: #23272f;
-  min-height: 130px;
 }
 
-.nda-textarea:focus {
-  outline: none;
-  border-color: #4676fa;
-  background: #fff;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 0.85rem 0;
-  font-size: 1.08rem;
-  font-weight: 600;
+button {
+  border-radius: 8px;
   border: none;
-  border-radius: 9px;
-  background: linear-gradient(90deg, #4676fa 0%, #5f9cff 100%);
-  color: #fff;
+  padding: 0.75em 1.5em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  background-color: #3d7eff;
+  color: white;
   cursor: pointer;
-  box-shadow: 0 4px 15px 0 rgba(70, 118, 250, 0.08);
-  transition: background 0.18s, transform 0.1s;
-  margin-bottom: 0.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+  transition: background-color 0.3s ease;
+  margin-top: 1.5rem;
 }
-.submit-btn:active {
-  transform: scale(0.98);
+
+button:hover {
+  background-color: #1f5eff;
 }
-.submit-btn:disabled {
-  background: #bfc9da;
-  color: #7b849c;
-  cursor: not-allowed;
+
+button:focus,
+button:focus-visible {
+  outline: 3px solid #a3c0ff;
+  outline-offset: 2px;
 }
 
 .spinner {
-  width: 20px;
-  height: 20px;
-  margin-right: 7px;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
   animation: spin 1s linear infinite;
-  vertical-align: middle;
 }
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
+
 .spinner .path {
-  stroke: #fff;
+  stroke: white;
   stroke-linecap: round;
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .error-msg {
-  color: #c00;
-  font-weight: 500;
-  background: #fee;
-  border: 1px solid #faa;
-  border-radius: 8px;
-  padding: 0.7rem 1rem;
-  margin-top: 0.75rem;
-  text-align: center;
-  font-size: 1rem;
+  color: red;
+  margin-top: 1rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #1a1a1a;
+    background-color: #ffffff;
+  }
+
+  .card {
+    background-color: #ffffff;
+    color: #1a1a1a;
+  }
+
+  a:hover {
+    color: #1f5eff;
+  }
+
+  button {
+    background-color: #3d7eff;
+  }
 }
 </style>
