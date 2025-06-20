@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { NdaModule } from './nda/nda.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import { User } from './users/user.entity';
 
 @Module({
@@ -28,6 +29,7 @@ import { User } from './users/user.entity';
     }),
     NdaModule, // Import your NDA module here
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
