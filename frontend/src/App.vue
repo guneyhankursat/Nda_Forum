@@ -1,40 +1,13 @@
 <template>
   <div class="app-bg">
     <div class="center-container">
-      <NDAForm :onResults="onResults" />
-      <div v-if="results" class="results-card">
-        <h2 class="results-title">Results</h2>
-        <pre class="results-content">{{ formatResults(results) }}</pre>
-      </div>
+      <router-view />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import NDAForm from './components/NDAForm.vue'
-
-const results = ref(null)
-
-function onResults(res) {
-  results.value = res
-}
-
-// Print each section and all its fields exactly as backend returns, without converting present to PRESENT/ABSENT
-function formatResults(results) {
-  if (!results) return ""
-  return Object.entries(results)
-    .map(([key, val]) => {
-      const lines = [`${key}:`]
-      for (const field in val) {
-        if (Object.prototype.hasOwnProperty.call(val, field)) {
-          lines.push(`  ${field}: ${val[field]}`)
-        }
-      }
-      return lines.join('\n')
-    })
-    .join('\n\n')
-}
+// Router handles component switching and data flow
 </script>
 
 <style scoped>

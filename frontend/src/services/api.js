@@ -1,25 +1,26 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:3000/nda';
+const API_BASE = '/api/nda';
 
-export const checkNdaAI = async (text) => {
+export const checkNdaAI = async (text, jwt) => {
   try {
-    const response = await axios.post(`${API_BASE}/check-ai`, { text });
+    const headers = jwt ? { Authorization: `Bearer ${jwt}` } : {};
+    const response = await axios.post(`${API_BASE}/check-ai`, { text }, { headers });
     return response.data;
   } catch (error) {
     console.error('API Error:', error);
     
     if (error.response) {
-      // Server responded with error status
+      // Server returned an error response
       const errorMessage = error.response.data?.message || 
                           error.response.data?.error || 
                           `Server error: ${error.response.status}`;
       throw new Error(errorMessage);
     } else if (error.request) {
-      // Request was made but no response received
+      // Network request failed
       throw new Error('No response from server. Please check if the backend is running.');
     } else {
-      // Something else happened
+      // Other error occurred
       throw new Error(error.message || 'An unexpected error occurred');
     }
   }

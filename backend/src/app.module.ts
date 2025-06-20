@@ -5,12 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NdaModule } from './nda/nda.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { HealthController } from './health/health.controller';
 import { User } from './users/user.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Makes .env variables available throughout the app
+      isGlobal: true, // Environment variables accessible app-wide
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -22,14 +23,15 @@ import { User } from './users/user.entity';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         entities: [User],
-        synchronize: true, // Set to false in production
-        logging: true, // Set to false in production
+        synchronize: true, // Disable in production
+        logging: true, // Disable in production
       }),
       inject: [ConfigService],
     }),
-    NdaModule, // Import your NDA module here
+    NdaModule, // NDA analysis functionality
     UsersModule,
     AuthModule,
   ],
+  controllers: [HealthController],
 })
 export class AppModule {}

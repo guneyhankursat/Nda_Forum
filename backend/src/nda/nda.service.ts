@@ -18,10 +18,10 @@ export class NdaService {
     new RemediesClauseChecker(),
     new ExclusionsClauseChecker(),
     new SignaturesClauseChecker(),
-    // Add other clause checkers here if needed
+    // Additional clause checkers can be added here
   ];
 
-  // Basic regex-based clause checks
+  // Pattern matching for clause detection
   checkAllClauses(text: string): Record<string, ClauseCheckResult> {
     const results: Record<string, ClauseCheckResult> = {};
     for (const checker of this.checkers) {
@@ -30,7 +30,7 @@ export class NdaService {
     return results;
   }
 
-  // AI-powered clause detection using OpenAI
+  // OpenAI integration for advanced clause analysis
   private openai: OpenAI | null = null;
 
   constructor() {
@@ -40,8 +40,32 @@ export class NdaService {
     }
   }
 
+  // Helper function to clean up snippets by removing line numbers and indices
+  private cleanSnippet(snippet: string): string {
+    if (!snippet || typeof snippet !== 'string') return snippet || '';
+    
+    // Remove patterns like "0:", "1:", "2:", etc. at the beginning of lines
+    return snippet.replace(/^\d+:\s*/gm, '').trim();
+  }
+
+  // Helper function to clean up AI response
+  private cleanAIResponse(response: any): any {
+    if (!response || typeof response !== 'object') return response;
+    
+    const cleaned = { ...response };
+    for (const [key, value] of Object.entries(cleaned)) {
+      if (value && typeof value === 'object' && 'snippet' in value && typeof value.snippet === 'string') {
+        cleaned[key] = {
+          ...value,
+          snippet: this.cleanSnippet(value.snippet)
+        };
+      }
+    }
+    return cleaned;
+  }
+
   async checkAllClausesWithAI(text: string): Promise<any> {
-    // If OpenAI is not configured, fall back to basic checks
+    // Use pattern matching when OpenAI isn't available
     if (!this.openai) {
       console.log('OpenAI not configured, falling back to basic clause checks');
       return {
@@ -75,20 +99,21 @@ ${text}
       const content = completion.choices[0].message.content;
 
       try {
-        // Extract JSON block from the AI response
+        // Parse JSON response from OpenAI
         const jsonMatch = content?.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
-          return JSON.parse(jsonMatch[0]);
+          const parsedResponse = JSON.parse(jsonMatch[0]);
+          return this.cleanAIResponse(parsedResponse);
         }
-        // fallback, return raw content
+        // Return raw content if JSON parsing fails
         return { raw: content };
       } catch (e) {
         return { error: 'AI response could not be parsed as JSON', raw: content };
       }
     } catch (error) {
-      // Log for debugging
+      // Log the error for troubleshooting
       console.error('OpenAI API error:', error);
-      // Return fallback instead of throwing error
+      // Use pattern matching as backup
       return {
         error: 'AI analysis failed, using basic checks instead',
         fallback: this.checkAllClauses(text)

@@ -14,16 +14,16 @@ export class AuthService {
   ) {}
 
   async register(email: string, password: string, firstName?: string, lastName?: string) {
-    // Check if user already exists
+    // Look for existing user with same email
     const existingUser = await this.usersRepository.findOne({ where: { email } });
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
     }
 
-    // Hash password
+    // Encrypt password for storage
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
+    // Store new user record
     const user = this.usersRepository.create({
       email,
       password: hashedPassword,
@@ -33,7 +33,7 @@ export class AuthService {
 
     const savedUser = await this.usersRepository.save(user);
 
-    // Generate JWT token
+    // Create authentication token
     const payload = { email: user.email, sub: user.id };
     const token = this.jwtService.sign(payload);
 
@@ -49,19 +49,19 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    // Find user by email
+    // Find user by email address
     const user = await this.usersRepository.findOne({ where: { email } });
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Verify password
+    // Validate password against stored hash
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Generate JWT token
+    // Create authentication token
     const payload = { email: user.email, sub: user.id };
     const token = this.jwtService.sign(payload);
 
