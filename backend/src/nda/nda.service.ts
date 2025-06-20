@@ -31,11 +31,25 @@ export class NdaService {
   }
 
   // AI-powered clause detection using OpenAI
-  private openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
+  private openai: OpenAI | null = null;
+
+  constructor() {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (apiKey && apiKey !== 'your-openai-api-key') {
+      this.openai = new OpenAI({ apiKey });
+    }
+  }
 
   async checkAllClausesWithAI(text: string): Promise<any> {
+    // If OpenAI is not configured, fall back to basic checks
+    if (!this.openai) {
+      console.log('OpenAI not configured, falling back to basic clause checks');
+      return {
+        message: 'AI analysis not available (OpenAI API key not configured)',
+        fallback: this.checkAllClauses(text)
+      };
+    }
+
     try {
       const prompt = `
 Analyze the following NDA and state if these clauses are present: confidentiality, term, jurisdiction, remedies, exclusions, signatures.
@@ -74,7 +88,11 @@ ${text}
     } catch (error) {
       // Log for debugging
       console.error('OpenAI API error:', error);
-      throw new Error('AI clause detection failed: ' + (error.message || error.toString()));
+      // Return fallback instead of throwing error
+      return {
+        error: 'AI analysis failed, using basic checks instead',
+        fallback: this.checkAllClauses(text)
+      };
     }
   }
 }
