@@ -1,95 +1,78 @@
-# NDA Forum 📜💬
+# NDA Forum
 
-A full-stack application for hosting discussions and sharing insights about Non‑Disclosure Agreements (NDAs). Built with a **Vue 3** frontend and a **TypeScript** backend, this platform allows users to analyze NDA clauses collaboratively and discuss their implications.
+NDA Forum is a full-stack application designed to analyze Non-Disclosure Agreements (NDAs) using AI. It provides a secure, user-friendly platform for users to upload NDA text and receive an analysis of key clauses. The application is built with a Vue 3 frontend, a NestJS backend, and uses PostgreSQL for data storage, all orchestrated with Docker.
 
----
+## ✨ Features
 
-## 💡 Key Features
+- **User Authentication**: Secure user registration and login using JWT tokens.
+- **AI-Powered NDA Analysis**: Analyzes NDA text to identify the presence and content of key clauses.
+- **Protected Routes**: API routes are protected, requiring valid JWT authentication.
+- **RESTful API**: A well-structured backend API for managing users and NDA analysis.
+- **Dockerized Environment**: Fully containerized for easy setup and deployment.
+- **Reverse Proxy**: Nginx is configured as a reverse proxy for the frontend and backend services.
 
-- **Collaborative Discussions**: Engage in conversations about NDA clauses, their interpretations, and best practices.
-- **Clause Analyzer**: Upload NDA documents and analyze their clauses for compliance and completeness.
-- **Secure Backend**: Built using TypeScript to ensure efficient and reliable clause processing.
-- **Modern Frontend**: Utilizes Vue.js for a responsive and dynamic user interface.
+## 🚀 Tech Stack
 
----
+- **Frontend**: Vue 3, Vite, JavaScript
+- **Backend**: NestJS, TypeScript, TypeORM
+- **Database**: PostgreSQL
+- **Authentication**: JWT (JSON Web Tokens)
+- **AI Integration**: OpenAI API
+- **Containerization**: Docker, Docker Compose
+- **Reverse Proxy**: Nginx
 
-## ⚙️ Technologies Used
+## 🏁 Getting Started
 
-- **Vue.js** – Interactive frontend framework
-- **TypeScript** – Backend logic and processing
-- **CSS/HTML/JavaScript** – Styling and UI structure
-- **Vite** – Frontend dev server and build tool
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
----
+### Prerequisites
 
-## 📁 Project Structure
+- [Docker](https://www.docker.com/products/docker-desktop) installed on your machine.
+- An [OpenAI API Key](https://platform.openai.com/api-keys) for AI analysis.
 
-| File / Folder         | Description                               |
-|-----------------------|-------------------------------------------|
-| `src/components/`     | Vue components for the frontend UI        |
-| `src/services/`       | TypeScript services for backend logic     |
-| `public/`             | Static assets (images, icons, etc.)       |
-| `README.md`           | You are here!                             |
+### Installation & Setup
 
----
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/guneyhankursat/Nda_Forum.git
+    cd Nda_Forum
+    ```
 
-## 🚀 Getting Started
+2.  **Set up environment variables:**
+    The backend service requires an OpenAI API key to function correctly. You need to pass this key to the `docker-compose.yml` file.
 
-### 🧩 Prerequisites
+    In your `docker-compose.yml`, find the `backend` service and update the `OPENAI_API_KEY` environment variable:
+    ```yaml
+    services:
+      backend:
+        # ... other configurations
+        environment:
+          # ... other environment variables
+          OPENAI_API_KEY: "your-actual-openai-api-key-here" 
+    ```
+    *Note: For a production environment, it is recommended to use a `.env` file and reference it in your `docker-compose.yml` to avoid hardcoding secrets.*
 
-- [Node.js](https://nodejs.org/) 18 or later
-- A web browser to access the frontend
+3.  **Build and run the application with Docker Compose:**
+    ```sh
+    docker-compose up --build -d
+    ```
+    This command will build the images for the frontend and backend services and start all the containers in detached mode.
 
-### 🛠 Backend Setup
+## Usage
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/guneyhankursat/Nda_Forum.git
-   cd Nda_Forum
-   ```
+Once the containers are up and running:
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+-   **Frontend**: Access the application at `http://localhost`.
+-   **Backend API**: The API is available at `http://localhost:3000`.
+-   **Database**: The PostgreSQL database is running on port `5432`.
 
-3. Start the backend server:
-   ```bash
-   npm run dev
-   ```
+You can register a new user, log in, and use the NDA checker to analyze your documents.
 
-The server will listen on **http://localhost:3000**.
+## 🐳 Docker Services
 
-### 🌐 Frontend Setup
+The `docker-compose.yml` file defines the following services:
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Launch the development server:
-   ```bash
-   npm run dev
-   ```
-
-Access the frontend at **http://localhost:5173**.
-
----
-
-## 🧪 Running Tests
-
-Run backend tests with:
-```bash
-npm run test
-```
-
----
-
-## 📜 License
-
-This project is provided under the terms of the MIT license.
+-   `frontend`: The Vue 3 application.
+-   `backend`: The NestJS API.
+-   `db`: The PostgreSQL database.
+-   `nginx`: The reverse proxy that routes traffic to the frontend and backend.
