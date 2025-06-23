@@ -8,4 +8,37 @@ updates:
   - package-ecosystem: "" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
+      interval: "weekly"version: 2
+updates:
+  # Frontend dependencies
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "guneyhankaankursat"
+    assignees:
+      - "guneyhankaankursat"
+
+  # Backend dependencies
+  - package-ecosystem: "npm"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "guneyhankaankursat"
+    assignees:
+      - "guneyhankaankursat"
+
+  # Root dependencies (if any)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "guneyhankaankursat"
+    assignees:
+      - "guneyhankaankursat"
